@@ -5,11 +5,11 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useActionState } from "react";
-import { RegisterUser } from "@/server/actions/registerUser";
+import { LoginUser } from "@/server/actions/loginUser";
 
-export default function RegisterForm() {
+export default function LoginForm() {
   // HANDLE FORM ACTION
-  const [state, formAction, pending] = useActionState(RegisterUser, null);
+  const [state, formAction, pending] = useActionState(LoginUser, null);
 
   return (
     <form
@@ -21,24 +21,6 @@ export default function RegisterForm() {
           <span className="font-semibold">Error:</span> {state.error}
         </div>
       )}
-      <div className="text-left">
-        <label
-          htmlFor="name"
-          className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
-        >
-          Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          defaultValue={state?.formData?.get("name") as string}
-          required
-          className="focus:border-primary focus:ring-primary w-full rounded-md border border-slate-300 bg-slate-50 px-4 py-2 text-slate-900 focus:ring-2 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
-          placeholder="Your full name"
-          autoComplete="name"
-        />
-      </div>
       <div className="text-left">
         <label
           htmlFor="email"
@@ -75,36 +57,19 @@ export default function RegisterForm() {
           autoComplete="new-password"
         />
       </div>
-      <div className="text-left">
-        <label
-          htmlFor="confirmPassword"
-          className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
-        >
-          Confirm Password
-        </label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          required
-          minLength={8}
-          className="focus:border-primary focus:ring-primary w-full rounded-md border border-slate-300 bg-slate-50 px-4 py-2 text-slate-900 focus:ring-2 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
-          placeholder="Re-enter your password"
-          autoComplete="new-password"
-        />
-      </div>
+
       <Button
         type="submit"
         size="lg"
         className="w-full hover:cursor-pointer"
         disabled={pending}
       >
-        {pending ? "Registering..." : "Register"}
+        {pending ? "Logging in..." : "Login"}
       </Button>
       <p className="text-center text-sm text-slate-600 dark:text-slate-300">
-        Already have an account?{" "}
-        <Link href="/auth/login" className="text-primary underline">
-          Login
+        Don't have an account?{" "}
+        <Link href="/auth/register" className="text-primary underline">
+          Register
         </Link>
       </p>
     </form>

@@ -30,34 +30,54 @@ export async function RegisterUser(initalState: any, formData: FormData) {
   }
 
   // REGISTER USER
-  // TODO: FIGURE OUT THE BEST APPROACH TO CATCH ERRORS
-  try {
-    const data = await auth.api.signUpEmail({
-      body: {
-        name: validatedFields.data.name,
-        email: validatedFields.data.email,
-        password: validatedFields.data.password,
-      },
-    });
+  const data = await auth.api.signUpEmail({
+    body: {
+      name: validatedFields.data.name,
+      email: validatedFields.data.email,
+      password: validatedFields.data.password,
+    },
+    asResponse: true,
+  });
 
-    // DEBUG
-    console.log("[INFO] DATA", data);
-
-    // SUCCESSFUL FORM SUBMISSION
-    redirect("/auth/login");
-  } catch (error) {
-    if (error instanceof APIError) {
-      const errCode = error.body ? (error.body.code as ErrorCode) : "UNKNOWN";
-      switch (errCode) {
-        case "USER_ALREADY_EXISTS":
-          return {
-            error: "Oops! Something went wrong. Please try again.",
-            formData: formData,
-          };
-        default:
-          return { error: error.message, formData: formData };
-      }
-    }
-    return { error: "Internal Server Error", formData: formData };
+  // ERROR HANDLING
+  if (data.status !== 200) {
+    return {
+      error: "Unable to register user. Please try again.",
+      formData: formData,
+    };
   }
+
+  // SUCCESSFUL FORM SUBMISSION
+  redirect("/auth/login");
+
+  // TODO: FIGURE OUT THE BEST APPROACH TO CATCH ERRORS
+  // try {
+  //   const data = await auth.api.signUpEmail({
+  //     body: {
+  //       name: validatedFields.data.name,
+  //       email: validatedFields.data.email,
+  //       password: validatedFields.data.password,
+  //     },
+  //   });
+
+  //   // DEBUG
+  //   console.log("[INFO] DATA", data);
+
+  //   // SUCCESSFUL FORM SUBMISSION
+  //   redirect("/auth/login");
+  // } catch (error) {
+  //   if (error instanceof APIError) {
+  //     const errCode = error.body ? (error.body.code as ErrorCode) : "UNKNOWN";
+  //     switch (errCode) {
+  //       case "USER_ALREADY_EXISTS":
+  //         return {
+  //           error: "Oops! Something went wrong. Please try again.",
+  //           formData: formData,
+  //         };
+  //       default:
+  //         return { error: error.message, formData: formData };
+  //     }
+  //   }
+  //   return { error: "Internal Server Error", formData: formData };
+  // }
 }
