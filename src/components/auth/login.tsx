@@ -5,7 +5,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useActionState } from "react";
-import { LoginUser } from "@/server/actions/loginUser";
+import { LoginUser } from "@/server/actions/auth";
 
 export default function LoginForm() {
   // HANDLE FORM ACTION

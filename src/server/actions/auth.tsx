@@ -4,10 +4,37 @@
 // IMPORTS
 import { auth, type ErrorCode } from "@/lib/auth";
 import { registerSchema } from "@/types/forms";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { APIError } from "better-auth/api";
+// import { APIError } from "better-auth/api";
 
-// FUCTION: REGISTER USER ACTION
+// FUNCTION: LOGIN USER ACTION
+export async function LoginUser(initalState: any, formData: FormData) {
+  // LOGIN USER
+  // TODO: FIGURE OUT THE BEST APPROACH TO CATCH ERRORS
+  const data = await auth.api.signInEmail({
+    headers: await headers(),
+    body: {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+    },
+    asResponse: true,
+  });
+
+  // DEBUG
+  console.log("[INFO] DATA", data);
+
+  // ERROR HANDLING
+  if (data.status === 401) {
+    return { error: "Invalid Email or Password", formData: formData };
+  }
+
+  // SUCCESSFUL FORM SUBMISSION
+  // TODO: MAKE THIS REDIRECT DYNAMIC
+  redirect("/home");
+}
+
+// FUNCTION: REGISTER USER ACTION
 export async function RegisterUser(initalState: any, formData: FormData) {
   // VALIDATE FORM
   const validatedFields = registerSchema.safeParse({
@@ -80,4 +107,15 @@ export async function RegisterUser(initalState: any, formData: FormData) {
   //   }
   //   return { error: "Internal Server Error", formData: formData };
   // }
+}
+
+// FUNCTION: LOGOUT USER ACTION
+export async function LogoutUser() {
+  // LOGOUT USER
+  await auth.api.signOut({
+    headers: await headers(),
+  });
+
+  // REDIRECT TO LANDING PAGE
+  redirect("/");
 }

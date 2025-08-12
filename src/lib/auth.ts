@@ -21,7 +21,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     autoSignIn: false, //defaults to true
-    requireEmailVerification: false,
+    requireEmailVerification: false, //defaults to true
   },
 
   // PLUGINS
