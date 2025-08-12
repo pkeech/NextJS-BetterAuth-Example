@@ -5,26 +5,23 @@
 //
 // ------------------------------------------------------------
 
+// IMPORTS
 import { betterAuth } from "better-auth";
+import { admin } from "better-auth/plugins";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/server/db";
 import { nextCookies } from "better-auth/next-js";
-import { admin } from "better-auth/plugins";
 
+// AUTH CONFIGURATION
 export const auth = betterAuth({
-  // DATABASE
   database: drizzleAdapter(db, {
-    provider: "sqlite", // or "mysql", "pg"
+    provider: "sqlite",
   }),
-
-  // EMAIL AND PASSWORD
   emailAndPassword: {
     enabled: true,
     autoSignIn: false, //defaults to true
     requireEmailVerification: false,
   },
-
-  // PLUGINS
   plugins: [nextCookies(), admin({ defaultRole: "regular" })],
 });
 

@@ -1,0 +1,48 @@
+// CLIENT COMPONENT
+"use client";
+
+// IMPORTS
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { sendEmail, sendVerificationEmail } from "@/lib/mail";
+
+// RENDER PAGE
+export default function HomePage() {
+  // DEFINE STATE
+  const [isPending, setIsPending] = useState(false);
+
+  // HANDLE FORM SUBMISSION
+  async function handleSubmit(formData: FormData) {
+    setIsPending(true);
+
+    console.log("Sending email...");
+    await sendVerificationEmail(
+      "test@test.dev",
+      "https://www.google.com",
+      "1234567890",
+    );
+
+    setIsPending(false);
+  }
+
+  // RETURN PAGE
+  return (
+    <main className="flex h-screen w-full flex-col items-center">
+      <h1 className="py-8 text-4xl font-bold">Home Page</h1>
+      <div className="flex w-1/2 flex-col items-center justify-center gap-8">
+        <p>
+          <span className="text-primary font-bold">Environment</span>:{" "}
+          {process.env.NODE_ENV}
+        </p>
+        <form className="w-full" action={handleSubmit}>
+          <Button
+            className="bg-primary hover:bg-primary/80 w-full hover:cursor-pointer"
+            disabled={isPending}
+          >
+            Send Email
+          </Button>
+        </form>
+      </div>
+    </main>
+  );
+}

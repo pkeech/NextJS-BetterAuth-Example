@@ -1,0 +1,107 @@
+// CLIENT COMPONENT
+"use client";
+
+// IMPORTS
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useActionState } from "react";
+import { RegisterUser } from "@/server/actions/registerUser";
+
+export default function RegisterForm() {
+  // HANDLE FORM ACTION
+  const [state, formAction, pending] = useActionState(RegisterUser, null);
+
+  return (
+    <form
+      action={formAction}
+      className="mx-auto max-w-md space-y-6 rounded-lg bg-white p-8 shadow-md dark:bg-slate-800"
+    >
+      <div className="text-left">
+        <label
+          htmlFor="name"
+          className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
+        >
+          Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          defaultValue={state?.formData?.get("name") as string}
+          required
+          className="focus:border-primary focus:ring-primary w-full rounded-md border border-slate-300 bg-slate-50 px-4 py-2 text-slate-900 focus:ring-2 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+          placeholder="Your full name"
+          autoComplete="name"
+        />
+      </div>
+      <div className="text-left">
+        <label
+          htmlFor="email"
+          className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
+        >
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          defaultValue={state?.formData?.get("email") as string}
+          required
+          className="focus:border-primary focus:ring-primary w-full rounded-md border border-slate-300 bg-slate-50 px-4 py-2 text-slate-900 focus:ring-2 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+          placeholder="you@example.com"
+          autoComplete="email"
+        />
+      </div>
+      <div className="text-left">
+        <label
+          htmlFor="password"
+          className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
+        >
+          Password
+        </label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          minLength={8}
+          className="focus:border-primary focus:ring-primary w-full rounded-md border border-slate-300 bg-slate-50 px-4 py-2 text-slate-900 focus:ring-2 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+          placeholder="Enter a strong password"
+          autoComplete="new-password"
+        />
+      </div>
+      <div className="text-left">
+        <label
+          htmlFor="confirmPassword"
+          className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
+        >
+          Confirm Password
+        </label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          required
+          minLength={8}
+          className="focus:border-primary focus:ring-primary w-full rounded-md border border-slate-300 bg-slate-50 px-4 py-2 text-slate-900 focus:ring-2 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+          placeholder="Re-enter your password"
+          autoComplete="new-password"
+        />
+      </div>
+      <Button
+        type="submit"
+        size="lg"
+        className="w-full hover:cursor-pointer"
+        disabled={pending}
+      >
+        {pending ? "Registering..." : "Register"}
+      </Button>
+      <p className="text-center text-sm text-slate-600 dark:text-slate-300">
+        Already have an account?{" "}
+        <Link href="/auth/login" className="text-primary underline">
+          Login
+        </Link>
+      </p>
+    </form>
+  );
+}
